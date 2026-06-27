@@ -2,7 +2,15 @@ import type { MetadataRoute } from "next";
 
 const baseUrl = "https://yjm-boy-phone-repair.vercel.app";
 
-const routes = ["", "/phone-repair", "/accessories", "/repair-tools", "/about", "/contact"];
+const routes = [
+  "",
+  "/phone-repair",
+  "/accessories",
+  "/repair-tools",
+  "/spare-parts",
+  "/about",
+  "/contact",
+];
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return routes.map((route) => ({

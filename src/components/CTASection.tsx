@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, MessageCircle } from "lucide-react";
+import { MapPin, MessageCircle, Phone } from "lucide-react";
 import { contactInfo } from "@/lib/data";
 
 export function CTASection() {
@@ -24,6 +24,10 @@ export function CTASection() {
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+            <a href={`tel:${contactInfo.phones[0]}`} className="btn-secondary">
+              <Phone className="h-5 w-5" aria-hidden="true" />
+              Call Now
+            </a>
             <a
               href={`https://wa.me/${contactInfo.whatsapp}?text=${message}`}
               className="btn-primary"
@@ -37,8 +41,8 @@ export function CTASection() {
               href="/contact"
               className="btn-secondary"
             >
-              Contact Details
-              <ArrowRight className="h-5 w-5" aria-hidden="true" />
+              <MapPin className="h-5 w-5" aria-hidden="true" />
+              Visit Our Shop
             </Link>
           </div>
         </div>

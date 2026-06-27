@@ -10,6 +10,7 @@ const navItems = [
   { href: "/phone-repair", label: "Phone Repair" },
   { href: "/accessories", label: "Accessories" },
   { href: "/repair-tools", label: "Repair Tools" },
+  { href: "/spare-parts", label: "Spare Parts" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];

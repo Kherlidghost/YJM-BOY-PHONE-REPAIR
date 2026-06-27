@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import { FloatingWhatsAppButton } from "@/components/FloatingWhatsAppButton";
-import { Footer } from "@/components/Footer";
-import { Navbar } from "@/components/Navbar";
+import { AppChrome } from "@/components/AppChrome";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -43,10 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Navbar />
-        {children}
-        <Footer />
-        <FloatingWhatsAppButton />
+        <AppChrome>{children}</AppChrome>
       </body>
     </html>
   );

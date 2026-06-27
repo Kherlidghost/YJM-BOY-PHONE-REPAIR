@@ -1,7 +1,14 @@
+import type { Metadata } from "next";
 import { BadgeCheck, MapPin, ShieldCheck } from "lucide-react";
 import { CTASection } from "@/components/CTASection";
 import { PageHeader } from "@/components/PageHeader";
 import { contactInfo } from "@/lib/data";
+
+export const metadata: Metadata = {
+  title: "About YJM BOY Phone Repair and Accessories",
+  description:
+    "Learn about YJM BOY, a trusted phone repair, accessories, spare parts, and mobile repair tools shop in Biu, Borno State.",
+};
 
 export default function AboutPage() {
   return (

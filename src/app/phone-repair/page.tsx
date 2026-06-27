@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import {
   BatteryCharging,
   Database,
@@ -11,6 +12,12 @@ import {
 import { CTASection } from "@/components/CTASection";
 import { PageHeader } from "@/components/PageHeader";
 import { phoneRepairServices } from "@/lib/data";
+
+export const metadata: Metadata = {
+  title: "Professional Phone Repair in Biu",
+  description:
+    "Professional phone repair in Biu for screen replacement, battery replacement, charging port repair, water damage support, data transfer, and diagnosis.",
+};
 
 const serviceIcons = [
   Smartphone,

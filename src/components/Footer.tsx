@@ -83,7 +83,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-white/10 px-4 py-5 text-center text-xs text-slate-500">
-        Copyright © 2026 {contactInfo.businessName}. All rights reserved.
+        © 2026 YJM BOY Phone Repair and Accessories. All rights reserved.
       </div>
     </footer>
   );

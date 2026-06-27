@@ -1,6 +1,15 @@
-import { MapPin, MessageCircle, Phone, Send } from "lucide-react";
+import type { Metadata } from "next";
+import { Clock, MapPin, MessageCircle, Navigation, Phone } from "lucide-react";
+import { ContactForm } from "@/components/ContactForm";
 import { PageHeader } from "@/components/PageHeader";
+import { CTASection } from "@/components/CTASection";
 import { contactInfo } from "@/lib/data";
+
+export const metadata: Metadata = {
+  title: "Contact YJM BOY Phone Repair in Biu",
+  description:
+    "Contact YJM BOY at No. 2 Market Road, Biu, Borno State for phone repair, accessories, spare parts, and repair tools.",
+};
 
 export default function ContactPage() {
   const message = encodeURIComponent(
@@ -63,57 +72,68 @@ export default function ContactPage() {
             <h2 className="mt-4 text-3xl font-black text-white">
               Send a quick message
             </h2>
-            <form className="mt-8 grid gap-5 md:grid-cols-2">
-              <label className="flex flex-col gap-2 text-sm font-bold text-slate-200">
-                Full name
-                <input
-                  type="text"
-                  placeholder="Your name"
-                  className="rounded-md border border-white/10 bg-[#07101a] px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300"
-                />
-              </label>
-              <label className="flex flex-col gap-2 text-sm font-bold text-slate-200">
-                Phone number
-                <input
-                  type="tel"
-                  placeholder="Your phone number"
-                  className="rounded-md border border-white/10 bg-[#07101a] px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300"
-                />
-              </label>
-              <label className="flex flex-col gap-2 text-sm font-bold text-slate-200 md:col-span-2">
-                What do you need?
-                <select className="rounded-md border border-white/10 bg-[#07101a] px-4 py-3 text-white outline-none transition focus:border-cyan-300">
-                  <option>Phone repair</option>
-                  <option>Accessories</option>
-                  <option>Repair tools</option>
-                  <option>General enquiry</option>
-                </select>
-              </label>
-              <label className="flex flex-col gap-2 text-sm font-bold text-slate-200 md:col-span-2">
-                Message
-                <textarea
-                  rows={5}
-                  placeholder="Tell us what you need"
-                  className="resize-none rounded-md border border-white/10 bg-[#07101a] px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-cyan-300"
-                />
-              </label>
-              <div className="md:col-span-2">
-                <button
-                  type="button"
-                  className="btn-primary"
-                >
-                  <Send className="h-5 w-5" aria-hidden="true" />
-                  Send Message
-                </button>
-                <p className="mt-3 text-sm text-slate-400">
-                  Form UI only. Backend submission will be added in a later
-                  phase.
-                </p>
+            <ContactForm />
+          </article>
+          <article className="premium-card p-6 sm:p-8">
+            <p className="flex items-center gap-2 text-sm font-black uppercase tracking-[0.2em] text-cyan-200">
+              <Clock className="h-4 w-4" aria-hidden="true" />
+              Business hours
+            </p>
+            <div className="mt-6 grid gap-4">
+              <div className="rounded-md border border-white/10 bg-[#07101a] px-5 py-4">
+                <p className="font-black text-white">Monday - Saturday</p>
+                <p className="mt-1 text-slate-300">8:00 AM - 6:00 PM</p>
               </div>
-            </form>
+              <div className="rounded-md border border-white/10 bg-[#07101a] px-5 py-4">
+                <p className="font-black text-white">Sunday</p>
+                <p className="mt-1 text-slate-300">Closed</p>
+              </div>
+            </div>
+          </article>
+          <article className="premium-card p-6 sm:p-8">
+            <p className="flex items-center gap-2 text-sm font-black uppercase tracking-[0.2em] text-yellow-200">
+              <Navigation className="h-4 w-4" aria-hidden="true" />
+              How to find us
+            </p>
+            <h2 className="mt-4 text-3xl font-black text-white">Visit No. 2 Market Road</h2>
+            <p className="mt-4 leading-7 text-slate-300">
+              Come to YJM BOY at No. 2 Market Road, Biu, Borno State for phone repair support,
+              accessories, spare parts, and mobile repair tools.
+            </p>
+            <LinkLikeContact href={`tel:${contactInfo.phones[0]}`} label="Call before visiting" />
+          </article>
+          <article className="premium-card p-6 sm:p-8 lg:col-span-2">
+            <p className="flex items-center gap-2 text-sm font-black uppercase tracking-[0.2em] text-cyan-200">
+              <MessageCircle className="h-4 w-4" aria-hidden="true" />
+              WhatsApp support
+            </p>
+            <h2 className="mt-4 text-3xl font-black text-white">Confirm repair or product availability fast</h2>
+            <p className="mt-4 max-w-3xl leading-7 text-slate-300">
+              Send a WhatsApp message to ask about repairs, accessories, spare parts, repair tools,
+              prices, and available stock before coming to the shop.
+            </p>
+            <a
+              href={`https://wa.me/${contactInfo.whatsapp}?text=${message}`}
+              className="btn-primary mt-6"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <MessageCircle className="h-5 w-5" aria-hidden="true" />
+              Chat on WhatsApp
+            </a>
           </article>
         </div>
       </section>
+      <CTASection />
     </main>
+  );
+}
+
+function LinkLikeContact({ href, label }: { href: string; label: string }) {
+  return (
+    <a href={href} className="btn-secondary mt-6">
+      <Phone className="h-5 w-5" aria-hidden="true" />
+      {label}
+    </a>
   );
 }

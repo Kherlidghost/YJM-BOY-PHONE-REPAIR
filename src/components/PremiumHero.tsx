@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, MessageCircle, ShieldCheck, Smartphone, Sparkles, Wrench } from "lucide-react";
+import { ArrowRight, MessageCircle, ShieldCheck, ShoppingBag, Smartphone, Sparkles, Wrench } from "lucide-react";
 import { contactInfo, heroStats } from "@/lib/data";
 
 export function PremiumHero() {
@@ -15,7 +15,7 @@ export function PremiumHero() {
         <div className="animate-rise">
           <p className="offer-badge mb-6">
             <Sparkles className="mr-2 h-4 w-4" aria-hidden="true" />
-            Premium repair brand in Biu
+            Trusted Phone Repair, Accessories & Repair Tools in Biu
           </p>
           <h1 className="max-w-5xl text-5xl font-black leading-[0.98] text-white sm:text-7xl lg:text-8xl">
             Phone repair that feels professional from start to finish.
@@ -37,6 +37,10 @@ export function PremiumHero() {
             <Link href="/phone-repair" className="btn-secondary">
               View Services
               <ArrowRight className="h-5 w-5" aria-hidden="true" />
+            </Link>
+            <Link href="/accessories" className="btn-secondary">
+              <ShoppingBag className="h-5 w-5" aria-hidden="true" />
+              View Products
             </Link>
           </div>
           <div className="mt-12 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
