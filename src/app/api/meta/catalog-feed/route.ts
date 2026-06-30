@@ -1,4 +1,4 @@
-import { NextResponse, type NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 type CatalogProduct = {
@@ -21,6 +21,8 @@ const csvColumns = [
   "image_link",
   "brand",
 ];
+
+const fallbackSiteUrl = "https://yjm-boy-phone-repair.vercel.app";
 
 export const dynamic = "force-dynamic";
 
@@ -48,15 +50,21 @@ function formatCatalogPrice(value: number | string) {
   }).format(amount)}`;
 }
 
-function getProductLink(request: NextRequest, productId: string) {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.startsWith("http")
-    ? process.env.NEXT_PUBLIC_SITE_URL
-    : request.nextUrl.origin;
+function getSiteUrl() {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
 
-  return new URL(`/products/${productId}`, baseUrl).toString();
+  if (siteUrl?.startsWith("http")) {
+    return siteUrl.replace(/\/$/, "");
+  }
+
+  return fallbackSiteUrl;
 }
 
-function buildCatalogCsv(products: CatalogProduct[], request: NextRequest) {
+function getProductLink(productId: string) {
+  return `${getSiteUrl()}/products/${productId}`;
+}
+
+function buildCatalogCsv(products: CatalogProduct[]) {
   const rows = products.map((product) => [
     product.id,
     product.name,
@@ -64,7 +72,7 @@ function buildCatalogCsv(products: CatalogProduct[], request: NextRequest) {
     product.stock_quantity > 0 ? "in stock" : "out of stock",
     "new",
     formatCatalogPrice(product.price),
-    getProductLink(request, product.id),
+    getProductLink(product.id),
     product.image_url ?? "",
     "YJM BOY",
   ]);
@@ -72,7 +80,7 @@ function buildCatalogCsv(products: CatalogProduct[], request: NextRequest) {
   return [csvColumns, ...rows].map((row) => row.map(csvValue).join(",")).join("\n");
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const supabase = await createSupabaseServerClient();
     const { data, error } = await supabase
@@ -91,7 +99,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const csv = buildCatalogCsv(data ?? [], request);
+    const csv = buildCatalogCsv(data ?? []);
 
     return new NextResponse(csv, {
       status: 200,
