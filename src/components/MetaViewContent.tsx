@@ -5,18 +5,22 @@ import { trackMetaViewContent } from "@/lib/meta-pixel";
 
 type MetaViewContentProps = {
   catalogProductId: string;
+  value: number | string;
 };
 
-export function MetaViewContent({ catalogProductId }: MetaViewContentProps) {
+export function MetaViewContent({ catalogProductId, value }: MetaViewContentProps) {
   useEffect(() => {
     let retryCount = 0;
     let retryTimer: number | undefined;
+    const price = Number(value);
 
     function fireViewContent() {
       // ViewContent is fired after product data loads. The content_id is the catalog feed id.
       const didFire = trackMetaViewContent({
         content_ids: [catalogProductId],
         content_type: "product",
+        currency: "NGN",
+        value: Number.isFinite(price) ? price : undefined,
       });
 
       if (!didFire && retryCount < 20) {
@@ -32,7 +36,7 @@ export function MetaViewContent({ catalogProductId }: MetaViewContentProps) {
         window.clearTimeout(retryTimer);
       }
     };
-  }, [catalogProductId]);
+  }, [catalogProductId, value]);
 
   return null;
 }
