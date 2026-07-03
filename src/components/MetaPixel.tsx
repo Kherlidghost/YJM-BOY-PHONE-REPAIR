@@ -57,13 +57,13 @@ export function MetaPixel({ pixelId }: MetaPixelProps) {
 
       // WhatsApp clicks are real contact intent, so they send Contact.
       if (href.includes("wa.me") || href.includes("whatsapp")) {
-        trackMetaContactIntent("whatsapp_click");
+        trackMetaContactIntent();
         return;
       }
 
       // Phone call clicks are real contact intent, so they send Contact.
       if (href.startsWith("tel:")) {
-        trackMetaContactIntent("phone_call_click");
+        trackMetaContactIntent();
       }
     }
 

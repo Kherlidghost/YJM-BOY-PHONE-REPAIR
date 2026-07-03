@@ -9,16 +9,12 @@ import { formatNaira } from "@/lib/products";
 
 export function CartPageClient() {
   const { items, itemCount, total, updateQuantity, removeItem } = useCart();
-  const contentIds = items.map((item) => item.id);
-
   function handleCheckoutClick() {
-    if (contentIds.length === 0) {
+    if (items.length === 0) {
       return;
     }
 
     trackMetaInitiateCheckout({
-      content_ids: contentIds,
-      content_type: "product",
       currency: "NGN",
       value: total,
     });

@@ -119,7 +119,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       trackMetaAddToCart({
         content_ids: [product.id],
         content_type: "product",
-        contents: [{ id: product.id, quantity: addedQuantity, item_price: price }],
         currency: "NGN",
         value: price * addedQuantity,
       });

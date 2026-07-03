@@ -11,16 +11,9 @@ type MetaPixelEventName =
 
 type MetaPixelEventParams = {
   content_ids?: string[];
-  content_name?: string;
   content_type?: "product" | "product_group";
-  contents?: Array<{
-    id: string;
-    quantity: number;
-    item_price?: number;
-  }>;
   currency?: string;
   value?: number;
-  source?: string;
 };
 
 declare global {
@@ -56,7 +49,7 @@ export function trackMetaAddToCart(params: Required<Pick<MetaPixelEventParams, "
   return trackMetaPixelEvent("AddToCart", params);
 }
 
-export function trackMetaInitiateCheckout(params: Required<Pick<MetaPixelEventParams, "content_ids" | "content_type">> & MetaPixelEventParams) {
+export function trackMetaInitiateCheckout(params: Required<Pick<MetaPixelEventParams, "currency" | "value">>) {
   // Fired when a customer clicks the checkout button from a non-empty cart.
   return trackMetaPixelEvent("InitiateCheckout", params);
 }
@@ -66,17 +59,17 @@ export function trackMetaPurchase(params: Required<Pick<MetaPixelEventParams, "c
   return trackMetaPixelEvent("Purchase", params);
 }
 
-export function trackMetaContact(source: string) {
+export function trackMetaContact() {
   // Fired when a visitor clicks a real contact CTA such as WhatsApp or phone call.
-  trackMetaPixelEvent("Contact", { source });
+  trackMetaPixelEvent("Contact");
 }
 
-export function trackMetaContactIntent(source: string) {
+export function trackMetaContactIntent() {
   // Fired for high-intent WhatsApp and phone clicks.
-  trackMetaPixelEvent("Contact", { source });
+  trackMetaPixelEvent("Contact");
 }
 
-export function trackMetaLead(source: string) {
+export function trackMetaLead() {
   // Fired only after a real lead action succeeds, such as the public enquiry form.
-  trackMetaPixelEvent("Lead", { source });
+  trackMetaPixelEvent("Lead");
 }

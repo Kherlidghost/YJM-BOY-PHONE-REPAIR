@@ -38,7 +38,7 @@ export function PurchaseTracker({ orderId, contentIds, value }: PurchaseTrackerP
       });
 
       if (didFire) {
-        trackMetaLead("checkout_form_submit");
+        trackMetaLead();
         window.sessionStorage.setItem(storageKey, "1");
         clearCart();
         return;

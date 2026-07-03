@@ -21,7 +21,7 @@ export function ContactForm() {
 
     trackedSuccessMessage.current = state.message;
     // Lead is fired only after the public contact form submits successfully.
-    trackMetaLead("contact_form_submit");
+    trackMetaLead();
   }, [state.message, state.ok]);
 
   return (
