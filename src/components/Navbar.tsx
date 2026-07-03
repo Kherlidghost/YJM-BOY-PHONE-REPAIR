@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, Smartphone } from "lucide-react";
+import { Menu, ShoppingCart, Smartphone } from "lucide-react";
+import { useCart } from "@/components/cart/CartProvider";
 import { contactInfo } from "@/lib/data";
 
 const navItems = [
@@ -17,6 +18,7 @@ const navItems = [
 
 export function Navbar() {
   const pathname = usePathname();
+  const { itemCount } = useCart();
 
   return (
     <header className="sticky top-0 z-40 border-b border-cyan-300/15 bg-[#05070b]/78 shadow-lg shadow-black/20 backdrop-blur-xl">
@@ -49,6 +51,22 @@ export function Navbar() {
               {item.label}
             </Link>
           ))}
+          <Link
+            href="/cart"
+            className={
+              pathname === "/cart"
+                ? "inline-flex items-center gap-2 rounded-md bg-cyan-300 px-3 py-2 font-black text-[#031018] transition"
+                : "inline-flex items-center gap-2 rounded-md px-3 py-2 transition hover:bg-white/10 hover:text-cyan-200"
+            }
+          >
+            <ShoppingCart className="h-4 w-4" aria-hidden="true" />
+            Cart
+            {itemCount > 0 ? (
+              <span className="rounded-full bg-yellow-300 px-2 py-0.5 text-xs font-black text-slate-950">
+                {itemCount}
+              </span>
+            ) : null}
+          </Link>
           <span className="hidden rounded-md border border-white/10 p-2 text-slate-300 md:grid lg:hidden">
             <Menu className="h-4 w-4" aria-hidden="true" />
           </span>

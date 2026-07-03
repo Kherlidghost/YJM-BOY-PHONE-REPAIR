@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, MessageCircle, PackageCheck } from "lucide-react";
 import { notFound } from "next/navigation";
+import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import { MetaViewContent } from "@/components/MetaViewContent";
 import {
   formatNaira,
@@ -83,9 +84,18 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
               <p className="mt-6 leading-8 text-slate-300">
                 {product.description || "Contact YJM Boy for details, availability, and buying advice."}
               </p>
+              <AddToCartButton
+                className="btn-secondary mt-8 w-full"
+                product={{
+                  id: product.id,
+                  name: product.name,
+                  price: product.price,
+                  image_url: product.image_url,
+                }}
+              />
               <a
                 href={`https://wa.me/${whatsappNumber}?text=${orderMessage}`}
-                className="btn-primary mt-8 w-full"
+                className="btn-primary mt-3 w-full"
                 target="_blank"
                 rel="noreferrer"
               >

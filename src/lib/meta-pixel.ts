@@ -1,6 +1,12 @@
 "use client";
 
-type MetaPixelEventName = "PageView" | "ViewContent" | "Contact" | "Lead";
+type MetaPixelEventName =
+  | "PageView"
+  | "ViewContent"
+  | "AddToCart"
+  | "Purchase"
+  | "Contact"
+  | "Lead";
 
 type MetaPixelEventParams = {
   content_ids?: string[];
@@ -42,6 +48,16 @@ export function trackMetaPageView() {
 export function trackMetaViewContent(params: Required<Pick<MetaPixelEventParams, "content_ids" | "content_type">> & MetaPixelEventParams) {
   // Fired when a real public product detail page opens. content_ids match the Meta catalog feed ids.
   return trackMetaPixelEvent("ViewContent", params);
+}
+
+export function trackMetaAddToCart(params: Required<Pick<MetaPixelEventParams, "content_ids" | "content_type">> & MetaPixelEventParams) {
+  // Fired only after a product is successfully stored in the local shopping cart.
+  return trackMetaPixelEvent("AddToCart", params);
+}
+
+export function trackMetaPurchase(params: Required<Pick<MetaPixelEventParams, "content_ids" | "content_type">> & MetaPixelEventParams) {
+  // Fired only on the order confirmation page after checkout is saved successfully.
+  return trackMetaPixelEvent("Purchase", params);
 }
 
 export function trackMetaContact(source: string) {

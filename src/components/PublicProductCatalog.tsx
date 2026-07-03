@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, MessageCircle, PackageCheck, Search } from "lucide-react";
 import { useMemo, useState } from "react";
+import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import {
   formatNaira,
   formatNairaCompact,
@@ -195,6 +196,14 @@ export function PublicProductCatalog({ products }: PublicProductCatalogProps) {
                     {product.description || "Contact YJM Boy for details, availability, and buying advice."}
                   </p>
                   <div className="mt-6 grid gap-3">
+                    <AddToCartButton
+                      product={{
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        image_url: product.image_url,
+                      }}
+                    />
                     <a
                       href={`https://wa.me/${whatsappNumber}?text=${getOrderMessage(product)}`}
                       className="btn-primary w-full"
