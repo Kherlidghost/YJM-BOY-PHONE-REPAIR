@@ -37,7 +37,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
   return (
     <main>
-      <MetaViewContent product={{ id: product.id, name: product.name, price: product.price }} />
+      <MetaViewContent catalogProductId={product.id} />
       <section className="tech-section">
         <div className="section-inner">
           <Link href={backHref} className="btn-secondary mb-8 px-4 py-2 text-sm">

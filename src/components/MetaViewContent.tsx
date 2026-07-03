@@ -4,33 +4,35 @@ import { useEffect } from "react";
 import { trackMetaViewContent } from "@/lib/meta-pixel";
 
 type MetaViewContentProps = {
-  product: {
-    id: string;
-    name: string;
-    price: number | string;
-  };
+  catalogProductId: string;
 };
 
-export function MetaViewContent({ product }: MetaViewContentProps) {
+export function MetaViewContent({ catalogProductId }: MetaViewContentProps) {
   useEffect(() => {
-    const value = Number(product.price);
+    let retryCount = 0;
+    let retryTimer: number | undefined;
 
-    // ViewContent is fired when a public product page opens; the id matches the catalog feed.
-    trackMetaViewContent({
-      content_ids: [product.id],
-      content_name: product.name,
-      content_type: "product",
-      contents: [
-        {
-          id: product.id,
-          quantity: 1,
-          item_price: Number.isFinite(value) ? value : undefined,
-        },
-      ],
-      currency: "NGN",
-      value: Number.isFinite(value) ? value : undefined,
-    });
-  }, [product.id, product.name, product.price]);
+    function fireViewContent() {
+      // ViewContent is fired after product data loads. The content_id is the catalog feed id.
+      const didFire = trackMetaViewContent({
+        content_ids: [catalogProductId],
+        content_type: "product",
+      });
+
+      if (!didFire && retryCount < 20) {
+        retryCount += 1;
+        retryTimer = window.setTimeout(fireViewContent, 250);
+      }
+    }
+
+    fireViewContent();
+
+    return () => {
+      if (retryTimer) {
+        window.clearTimeout(retryTimer);
+      }
+    };
+  }, [catalogProductId]);
 
   return null;
 }

@@ -27,10 +27,11 @@ export function trackMetaPixelEvent(
   params?: MetaPixelEventParams,
 ) {
   if (typeof window === "undefined" || typeof window.fbq !== "function") {
-    return;
+    return false;
   }
 
   window.fbq("track", eventName, params);
+  return true;
 }
 
 export function trackMetaPageView() {
@@ -38,9 +39,9 @@ export function trackMetaPageView() {
   trackMetaPixelEvent("PageView");
 }
 
-export function trackMetaViewContent(params: Required<Pick<MetaPixelEventParams, "content_ids" | "content_name" | "content_type">> & MetaPixelEventParams) {
+export function trackMetaViewContent(params: Required<Pick<MetaPixelEventParams, "content_ids" | "content_type">> & MetaPixelEventParams) {
   // Fired when a real public product detail page opens. content_ids match the Meta catalog feed ids.
-  trackMetaPixelEvent("ViewContent", params);
+  return trackMetaPixelEvent("ViewContent", params);
 }
 
 export function trackMetaContact(source: string) {
