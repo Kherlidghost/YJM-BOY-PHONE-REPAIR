@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, MessageCircle, PackageCheck } from "lucide-react";
 import { notFound } from "next/navigation";
+import { MetaViewContent } from "@/components/MetaViewContent";
 import {
   formatNaira,
   formatNairaCompact,
@@ -36,6 +37,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
   return (
     <main>
+      <MetaViewContent product={{ id: product.id, name: product.name, price: product.price }} />
       <section className="tech-section">
         <div className="section-inner">
           <Link href={backHref} className="btn-secondary mb-8 px-4 py-2 text-sm">

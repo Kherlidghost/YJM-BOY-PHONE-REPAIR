@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { AppChrome } from "@/components/AppChrome";
+import { MetaPixel } from "@/components/MetaPixel";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -38,9 +40,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const metaPixelId =
+    process.env.NEXT_PUBLIC_META_PIXEL_ID ?? process.env.VITE_META_PIXEL_ID ?? "1375434021349340";
+
   return (
     <html lang="en">
       <body>
+        <Suspense fallback={null}>
+          <MetaPixel pixelId={metaPixelId} />
+        </Suspense>
         <AppChrome>{children}</AppChrome>
       </body>
     </html>

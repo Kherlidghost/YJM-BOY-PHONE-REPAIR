@@ -1,8 +1,9 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useRef } from "react";
 import { Send } from "lucide-react";
 import { createEnquiry, type EnquiryActionState } from "@/actions/enquiries";
+import { trackMetaLead } from "@/lib/meta-pixel";
 
 const initialState: EnquiryActionState = {
   ok: false,
@@ -11,6 +12,17 @@ const initialState: EnquiryActionState = {
 
 export function ContactForm() {
   const [state, formAction, isPending] = useActionState(createEnquiry, initialState);
+  const trackedSuccessMessage = useRef("");
+
+  useEffect(() => {
+    if (!state.ok || trackedSuccessMessage.current === state.message) {
+      return;
+    }
+
+    trackedSuccessMessage.current = state.message;
+    // Lead is fired only after the public contact form submits successfully.
+    trackMetaLead("contact_form_submit");
+  }, [state.message, state.ok]);
 
   return (
     <form action={formAction} className="mt-8 grid gap-5 md:grid-cols-2">
