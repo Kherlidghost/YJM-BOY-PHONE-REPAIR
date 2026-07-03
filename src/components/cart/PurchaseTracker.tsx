@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useCart } from "@/components/cart/CartProvider";
-import { trackMetaPurchase } from "@/lib/meta-pixel";
+import { trackMetaLead, trackMetaPurchase } from "@/lib/meta-pixel";
 
 type PurchaseTrackerProps = {
   orderId: string;
@@ -38,6 +38,7 @@ export function PurchaseTracker({ orderId, contentIds, value }: PurchaseTrackerP
       });
 
       if (didFire) {
+        trackMetaLead("checkout_form_submit");
         window.sessionStorage.setItem(storageKey, "1");
         clearCart();
         return;

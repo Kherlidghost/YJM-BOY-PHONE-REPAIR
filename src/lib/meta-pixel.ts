@@ -4,6 +4,7 @@ type MetaPixelEventName =
   | "PageView"
   | "ViewContent"
   | "AddToCart"
+  | "InitiateCheckout"
   | "Purchase"
   | "Contact"
   | "Lead";
@@ -55,6 +56,11 @@ export function trackMetaAddToCart(params: Required<Pick<MetaPixelEventParams, "
   return trackMetaPixelEvent("AddToCart", params);
 }
 
+export function trackMetaInitiateCheckout(params: Required<Pick<MetaPixelEventParams, "content_ids" | "content_type">> & MetaPixelEventParams) {
+  // Fired when a customer clicks the checkout button from a non-empty cart.
+  return trackMetaPixelEvent("InitiateCheckout", params);
+}
+
 export function trackMetaPurchase(params: Required<Pick<MetaPixelEventParams, "content_ids" | "content_type">> & MetaPixelEventParams) {
   // Fired only on the order confirmation page after checkout is saved successfully.
   return trackMetaPixelEvent("Purchase", params);
@@ -66,9 +72,8 @@ export function trackMetaContact(source: string) {
 }
 
 export function trackMetaContactIntent(source: string) {
-  // Fired for high-intent WhatsApp and phone clicks so Meta receives both contact and lead signals.
+  // Fired for high-intent WhatsApp and phone clicks.
   trackMetaPixelEvent("Contact", { source });
-  trackMetaPixelEvent("Lead", { source });
 }
 
 export function trackMetaLead(source: string) {
