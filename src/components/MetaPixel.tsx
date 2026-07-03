@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Script from "next/script";
 import { usePathname, useSearchParams } from "next/navigation";
-import { trackMetaContact, trackMetaPageView } from "@/lib/meta-pixel";
+import { trackMetaContactIntent, trackMetaPageView } from "@/lib/meta-pixel";
 
 type MetaPixelProps = {
   pixelId?: string;
@@ -14,15 +14,27 @@ export function MetaPixel({ pixelId }: MetaPixelProps) {
   const searchParams = useSearchParams();
   const normalizedPixelId = pixelId?.trim();
   const [isPixelReady, setIsPixelReady] = useState(false);
+  const lastTrackedRoute = useRef<string | null>(null);
+  const routeKey = `${pathname}?${searchParams.toString()}`;
 
   useEffect(() => {
     if (!normalizedPixelId || !isPixelReady) {
       return;
     }
 
-    // PageView is fired once for the first URL and again whenever Next changes route.
+    if (lastTrackedRoute.current === null) {
+      lastTrackedRoute.current = routeKey;
+      return;
+    }
+
+    if (lastTrackedRoute.current === routeKey) {
+      return;
+    }
+
+    lastTrackedRoute.current = routeKey;
+    // PageView is fired on client-side route changes after the base script's first PageView.
     trackMetaPageView();
-  }, [isPixelReady, normalizedPixelId, pathname, searchParams]);
+  }, [isPixelReady, normalizedPixelId, routeKey]);
 
   useEffect(() => {
     if (!normalizedPixelId) {
@@ -45,13 +57,13 @@ export function MetaPixel({ pixelId }: MetaPixelProps) {
 
       // WhatsApp clicks are real contact intent, so they send Contact.
       if (href.includes("wa.me") || href.includes("whatsapp")) {
-        trackMetaContact("whatsapp_click");
+        trackMetaContactIntent("whatsapp_click");
         return;
       }
 
       // Phone call clicks are real contact intent, so they send Contact.
       if (href.startsWith("tel:")) {
-        trackMetaContact("phone_call_click");
+        trackMetaContactIntent("phone_call_click");
       }
     }
 
@@ -76,6 +88,7 @@ export function MetaPixel({ pixelId }: MetaPixelProps) {
           s.parentNode.insertBefore(t,s)}(window, document,'script',
           'https://connect.facebook.net/en_US/fbevents.js');
           fbq('init', '${normalizedPixelId}');
+          fbq('track', 'PageView');
         `}
       </Script>
       <noscript>

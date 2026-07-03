@@ -48,6 +48,12 @@ export function trackMetaContact(source: string) {
   trackMetaPixelEvent("Contact", { source });
 }
 
+export function trackMetaContactIntent(source: string) {
+  // Fired for high-intent WhatsApp and phone clicks so Meta receives both contact and lead signals.
+  trackMetaPixelEvent("Contact", { source });
+  trackMetaPixelEvent("Lead", { source });
+}
+
 export function trackMetaLead(source: string) {
   // Fired only after a real lead action succeeds, such as the public enquiry form.
   trackMetaPixelEvent("Lead", { source });
