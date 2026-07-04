@@ -30,7 +30,12 @@ export function trackMetaPixelEvent(
     return false;
   }
 
-  window.fbq("track", eventName, params);
+  if (params) {
+    window.fbq("track", eventName, params);
+  } else {
+    window.fbq("track", eventName);
+  }
+
   return true;
 }
 

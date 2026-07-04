@@ -87,6 +87,8 @@ export function MetaPixel({ pixelId }: MetaPixelProps) {
           t.src=v;s=b.getElementsByTagName(e)[0];
           s.parentNode.insertBefore(t,s)}(window, document,'script',
           'https://connect.facebook.net/en_US/fbevents.js');
+          // Disable Meta automatic configuration so only our explicit standard events are sent.
+          fbq('set', 'autoConfig', false, '${normalizedPixelId}');
           fbq('init', '${normalizedPixelId}');
           fbq('track', 'PageView');
         `}
