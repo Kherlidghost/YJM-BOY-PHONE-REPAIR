@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { getMetaCatalogContentId } from "@/lib/meta-catalog";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 type SubmittedCartItem = {
@@ -74,7 +75,7 @@ export async function createCheckoutOrder(
     };
   }
 
-  const productIds = cartItems.map((item) => item.id);
+  const productIds = cartItems.map((item) => getMetaCatalogContentId(item.id));
   const supabase = await createSupabaseServerClient();
   const { data: products, error: productError } = await supabase
     .from("products")

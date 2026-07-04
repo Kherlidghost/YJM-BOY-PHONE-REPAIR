@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { CheckCircle2 } from "lucide-react";
 import { PurchaseTracker } from "@/components/cart/PurchaseTracker";
+import { getMetaCatalogContentId } from "@/lib/meta-catalog";
 import { formatNaira } from "@/lib/products";
 
 export const metadata: Metadata = {
@@ -20,7 +21,7 @@ type ConfirmationPageProps = {
 export default async function CheckoutConfirmationPage({ searchParams }: ConfirmationPageProps) {
   const params = await searchParams;
   const orderId = params.order ?? "";
-  const contentIds = params.ids?.split(",").filter(Boolean) ?? [];
+  const contentIds = params.ids?.split(",").map(getMetaCatalogContentId).filter(Boolean) ?? [];
   const total = Number(params.total ?? 0);
   const safeTotal = Number.isFinite(total) ? total : 0;
 

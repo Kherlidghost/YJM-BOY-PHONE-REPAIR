@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowRight, MessageCircle, PackageCheck, Search } from "lucide-react";
 import { useMemo, useState } from "react";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
+import { getMetaCatalogContentId } from "@/lib/meta-catalog";
 import {
   formatNaira,
   formatNairaCompact,
@@ -162,6 +163,7 @@ export function PublicProductCatalog({ products }: PublicProductCatalogProps) {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filteredProducts.map((product) => {
             const stock = getStockStatus(product.stock_quantity);
+            const catalogContentId = getMetaCatalogContentId(product.id);
 
             return (
               <article key={product.id} className="premium-card group overflow-hidden">
@@ -198,7 +200,7 @@ export function PublicProductCatalog({ products }: PublicProductCatalogProps) {
                   <div className="mt-6 grid gap-3">
                     <AddToCartButton
                       product={{
-                        id: product.id,
+                        id: catalogContentId,
                         name: product.name,
                         price: product.price,
                         image_url: product.image_url,

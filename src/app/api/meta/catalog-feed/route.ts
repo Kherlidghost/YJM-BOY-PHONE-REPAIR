@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getMetaCatalogContentId, getMetaCatalogProductLink } from "@/lib/meta-catalog";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 type CatalogProduct = {
@@ -21,8 +22,6 @@ const csvColumns = [
   "image_link",
   "brand",
 ];
-
-const fallbackSiteUrl = "https://yjm-boy-phone-repair.vercel.app";
 
 export const dynamic = "force-dynamic";
 
@@ -50,32 +49,22 @@ function formatCatalogPrice(value: number | string) {
   }).format(amount)}`;
 }
 
-function getSiteUrl() {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
-
-  if (siteUrl?.startsWith("http")) {
-    return siteUrl.replace(/\/$/, "");
-  }
-
-  return fallbackSiteUrl;
-}
-
-function getProductLink(productId: string) {
-  return `${getSiteUrl()}/products/${productId}`;
-}
-
 function buildCatalogCsv(products: CatalogProduct[]) {
-  const rows = products.map((product) => [
-    product.id,
-    product.name,
-    product.description?.trim() || product.name,
-    product.stock_quantity > 0 ? "in stock" : "out of stock",
-    "new",
-    formatCatalogPrice(product.price),
-    getProductLink(product.id),
-    product.image_url ?? "",
-    "YJM BOY",
-  ]);
+  const rows = products.map((product) => {
+    const catalogContentId = getMetaCatalogContentId(product.id);
+
+    return [
+      catalogContentId,
+      product.name,
+      product.description?.trim() || product.name,
+      product.stock_quantity > 0 ? "in stock" : "out of stock",
+      "new",
+      formatCatalogPrice(product.price),
+      getMetaCatalogProductLink(catalogContentId),
+      product.image_url ?? "",
+      "YJM BOY",
+    ];
+  });
 
   return [csvColumns, ...rows].map((row) => row.map(csvValue).join(",")).join("\n");
 }
@@ -88,6 +77,7 @@ export async function GET() {
       .select("id,name,price,stock_quantity,description,image_url")
       .eq("is_available", true)
       .not("image_url", "is", null)
+      .gt("stock_quantity", 0)
       .gt("price", 0)
       .order("created_at", { ascending: false })
       .returns<CatalogProduct[]>();

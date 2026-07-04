@@ -4,6 +4,7 @@ import { ArrowLeft, MessageCircle, PackageCheck } from "lucide-react";
 import { notFound } from "next/navigation";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
 import { MetaViewContent } from "@/components/MetaViewContent";
+import { getMetaCatalogContentId } from "@/lib/meta-catalog";
 import {
   formatNaira,
   formatNairaCompact,
@@ -32,13 +33,14 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
   const stock = getStockStatus(product.stock_quantity);
   const backHref = getProductCategoryHref(product.category);
+  const catalogContentId = getMetaCatalogContentId(product.id);
   const orderMessage = encodeURIComponent(
     `Hello YJM BOY, I want to buy this product:\nProduct: ${product.name}\nCategory: ${product.category}\nPrice: ${formatNairaCompact(product.price)}\nIs it available?`,
   );
 
   return (
     <main>
-      <MetaViewContent catalogProductId={product.id} value={product.price} />
+      <MetaViewContent catalogProductId={catalogContentId} value={product.price} />
       <section className="tech-section">
         <div className="section-inner">
           <Link href={backHref} className="btn-secondary mb-8 px-4 py-2 text-sm">
@@ -87,7 +89,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
               <AddToCartButton
                 className="btn-secondary mt-8 w-full"
                 product={{
-                  id: product.id,
+                  id: catalogContentId,
                   name: product.name,
                   price: product.price,
                   image_url: product.image_url,
