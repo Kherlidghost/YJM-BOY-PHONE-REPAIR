@@ -19,7 +19,33 @@ type MetaPixelEventParams = {
 declare global {
   interface Window {
     fbq?: (...args: unknown[]) => void;
+    __yjmMetaPixelQueue?: MetaPixelQueuedEvent[];
   }
+}
+
+type MetaPixelQueuedEvent = {
+  eventName: MetaPixelEventName;
+  params?: MetaPixelEventParams;
+};
+
+function sendMetaPixelEvent({ eventName, params }: MetaPixelQueuedEvent) {
+  if (params) {
+    window.fbq?.("track", eventName, params);
+  } else {
+    window.fbq?.("track", eventName);
+  }
+}
+
+export function flushMetaPixelEvents() {
+  if (typeof window === "undefined" || typeof window.fbq !== "function") {
+    return false;
+  }
+
+  const queuedEvents = window.__yjmMetaPixelQueue ?? [];
+  window.__yjmMetaPixelQueue = [];
+
+  queuedEvents.forEach(sendMetaPixelEvent);
+  return true;
 }
 
 export function trackMetaPixelEvent(
@@ -27,14 +53,18 @@ export function trackMetaPixelEvent(
   params?: MetaPixelEventParams,
 ) {
   if (typeof window === "undefined" || typeof window.fbq !== "function") {
-    return false;
+    if (typeof window !== "undefined") {
+      window.__yjmMetaPixelQueue = [
+        ...(window.__yjmMetaPixelQueue ?? []).slice(-25),
+        { eventName, params },
+      ];
+    }
+
+    return true;
   }
 
-  if (params) {
-    window.fbq("track", eventName, params);
-  } else {
-    window.fbq("track", eventName);
-  }
+  flushMetaPixelEvents();
+  sendMetaPixelEvent({ eventName, params });
 
   return true;
 }

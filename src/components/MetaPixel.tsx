@@ -3,7 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import Script from "next/script";
 import { usePathname, useSearchParams } from "next/navigation";
-import { trackMetaContactIntent, trackMetaPageView } from "@/lib/meta-pixel";
+import {
+  flushMetaPixelEvents,
+  trackMetaContactIntent,
+  trackMetaPageView,
+} from "@/lib/meta-pixel";
 
 type MetaPixelProps = {
   pixelId?: string;
@@ -77,7 +81,14 @@ export function MetaPixel({ pixelId }: MetaPixelProps) {
 
   return (
     <>
-      <Script id="meta-pixel" strategy="afterInteractive" onReady={() => setIsPixelReady(true)}>
+      <Script
+        id="meta-pixel"
+        strategy="afterInteractive"
+        onReady={() => {
+          setIsPixelReady(true);
+          flushMetaPixelEvents();
+        }}
+      >
         {`
           !function(f,b,e,v,n,t,s)
           {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
